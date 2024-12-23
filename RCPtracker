@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RCP Tracker App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #1c1c1c;
+            color: #f0f0f0;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        header img {
+            max-height: 60px;
+            margin-right: 15px;
+        }
+        header h1 {
+            color: #ff7900;
+        }
+        .section {
+            margin-bottom: 20px;
+            border: 1px solid #ff7900;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: #2e2e2e;
+        }
+        .section h2 {
+            color: #ff7900;
+        }
+        button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            background-color: #ff7900;
+            display: flex;
+            align-items: center;
+        }
+        button img {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
+        button:hover {
+            background-color: #d96d00;
+        }
+        .log {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+            max-height: 150px;
+            overflow-y: auto;
+            background-color: #1c1c1c;
+        }
+        #fct-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff;
+            border: 2px solid #ff7900;
+            border-radius: 8px;
+        }
+        #fct {
+            font-weight: bold;
+            font-size: 24px;
+        }
+        .red {
+            color: red;
+        }
+        .orange {
+            color: orange;
+        }
+        .green {
+            color: green;
+        }
+        .therapy-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        .therapy-logo img {
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="Logo UDLA Capacita.png" alt="UDLA Capacita Logo">
+        <h1>RCP Tracker App</h1>
+    </header>
+
+    <div class="section">
+        <h2>Cronómetros</h2>
+        <p>
+            <strong>Tiempo total de RCP:</strong>
+            <span id="rcp-time">00:00</span>
+        </p>
+        <button onclick="startRCP()">Iniciar RCP</button>
+        <button onclick="stopRCP()">Detener RCP</button>
+        <button onclick="resetRCP()">Reiniciar RCP</button>
+
+        <p>
+            <strong>Tiempo de compresiones:</strong>
+            <span id="compression-time">00:00</span>
+        </p>
+        <button onclick="startCompression()">Iniciar/Reanudar Compresiones</button>
+        <button onclick="stopCompression()">Detener Compresiones</button>
+
+        <div id="fct-container">
+            <span id="fct" class="red">0%</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Metrónomo</h2>
+        <button onclick="startMetronome()">Iniciar Metrónomo</button>
+        <button onclick="stopMetronome()">Detener Metrónomo</button>
+    </div>
+
+    <div class="section">
+        <h2>Fármacos</h2>
+        <button onclick="logAction('Adrenalina')">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/syringe.png" alt="Syringe Icon">Adrenalina</button>
+        <button onclick="logAction('Amiodarona')">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/syringe.png" alt="Syringe Icon">Amiodarona</button>
+        <button onclick="logAction('Lidocaína')">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/syringe.png" alt="Syringe Icon">Lidocaína</button>
+        <button onclick="logAction('Glucosa 30%')">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/syringe.png" alt="Syringe Icon">Glucosa 30%</button>
+        <button onclick="logAction('Suero Fisiológico 0.9%')">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/syringe.png" alt="Syringe Icon">Suero Fisiológico 0.9%</button>
+        <button onclick="logAction('Ringer Lactato')">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/syringe.png" alt="Syringe Icon">Ringer Lactato</button>
+
+        <div class="log" id="drug-log"></div>
+    </div>
+
+    <div class="section">
+        <h2>Ritmos</h2>
+        <button onclick="logAction('Fibrilación Ventricular')">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/heart-with-pulse.png" alt="Heart Icon">Fibrilación Ventricular</button>
+        <button onclick="logAction('Taquicardia Ventricular sin Pulso')">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/heart-with-pulse.png" alt="Heart Icon">Taquicardia Ventricular sin Pulso</button>
+        <button onclick="logAction('Asistolia')">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/heart-with-pulse.png" alt="Heart Icon">Asistolia</button>
+        <button onclick="logAction('Actividad Eléctrica sin Pulso')">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/heart-with-pulse.png" alt="Heart Icon">Actividad Eléctrica sin Pulso</button>
+
+        <div class="log" id="rhythm-log"></div>
+    </div>
+
+    <div class="section">
+        <h2>Terapia Eléctrica</h2>
+        <div class="therapy-logo">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/flash.png" alt="Flash Logo">
+        </div>
+        <button onclick="logAction('Desfibrilación')">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/flash.png" alt="Flash Icon">Desfibrilación</button>
+        <button onclick="logAction('Cardioversión')">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/flash.png" alt="Flash Icon">Cardioversión</button>
+        <button onclick="logAction('Marcapaso')">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/flash.png" alt="Flash Icon">Marcapaso</button>
+
+        <div class="log" id="therapy-log"></div>
+    </div>
+
+    <script>
+        let rcpInterval, compressionInterval, metronomeInterval;
+        let rcpSeconds = 0, compressionSeconds = 0;
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        function startRCP() {
+            if (!rcpInterval) {
+                rcpInterval = setInterval(() => {
+                    rcpSeconds++;
+                    document.getElementById('rcp-time').innerText = formatTime(rcpSeconds);
+                    updateFCT();
+                }, 1000);
+            }
+        }
+
+        function stopRCP() {
+            clearInterval(rcpInterval);
+            rcpInterval = null;
+        }
+
+        function resetRCP() {
+            clearInterval(rcpInterval);
+            clearInterval(compressionInterval);
+            rcpInterval = compressionInterval = null;
+            rcpSeconds = compressionSeconds = 0;
+            document.getElementById('rcp-time').innerText = formatTime(rcpSeconds);
+            document.getElementById('compression-time').innerText = formatTime(compressionSeconds);
+            document.getElementById('fct').innerText = '0%';
+            document.getElementById('fct').className = 'red';
+        }
+
+        function startCompression() {
+            if (!compressionInterval) {
+                compressionInterval = setInterval(() => {
+                    compressionSeconds++;
+                    document.getElementById('compression-time').innerText = formatTime(compressionSeconds);
+                    updateFCT();
+                }, 1000);
+            }
+        }
+
+        function stopCompression() {
+            clearInterval(compressionInterval);
+            compressionInterval = null;
+        }
+
+        function updateFCT() {
+            if (rcpSeconds > 0) {
+                const fct = (compressionSeconds / rcpSeconds) * 100;
+                const fctElement = document.getElementById('fct');
+                fctElement.innerText = `${fct.toFixed(2)}%`;
+                fctElement.className = fct < 60 ? 'red' : fct < 80 ? 'orange' : 'green';
+            }
+        }
+
+        function logAction(action) {
+            const now = new Date();
+            const time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+            const logEntry = `<div class='log-entry'>${time} - ${action}</div>`;
+
+            if (['Adrenalina', 'Amiodarona', 'Lidocaína', 'Glucosa 30%', 'Suero Fisiológico 0.9%', 'Ringer Lactato'].includes(action)) {
+                document.getElementById('drug-log').innerHTML += logEntry;
+            } else if (['Fibrilación Ventricular', 'Taquicardia Ventricular sin Pulso', 'Asistolia', 'Actividad Eléctrica sin Pulso'].includes(action)) {
+                document.getElementById('rhythm-log').innerHTML += logEntry;
+            } else {
+                document.getElementById('therapy-log').innerHTML += logEntry;
+            }
+        }
+
+        function startMetronome() {
+            stopMetronome(); // Ensure no duplicate intervals.
+            const audio = new Audio('110 BPM - Metronome - Drumset Fundamentals.mp3');
+            audio.loop = true;
+            audio.play();
+            metronomeInterval = audio;
+        }
+
+        function stopMetronome() {
+            if (metronomeInterval) {
+                metronomeInterval.pause();
+                metronomeInterval.currentTime = 0;
+                metronomeInterval = null;
+            }
+        }
+    </script>
+</body>
+</html>
